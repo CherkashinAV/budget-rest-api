@@ -7,17 +7,7 @@ import (
 	"github.com/go-sql-driver/mysql"
 )
 
-type DataBase struct {
-	db *sql.DB
-}
-
-func New(db *sql.DB) *DataBase {
-	return &DataBase{
-		db: db,
-	}
-}
-
-func Connect() (*DataBase, error){
+func Connect() (*sql.DB, error){
 	cfg := SQLConfig()
 	var err error
 	var db *sql.DB
@@ -26,7 +16,7 @@ func Connect() (*DataBase, error){
 		return nil, err
 	}
 	err = db.Ping()
-	return New(db), err
+	return db, err
 }
 
 func SQLConfig() mysql.Config{
@@ -39,4 +29,6 @@ func SQLConfig() mysql.Config{
     }
 	return cfg
 }
+
+
 

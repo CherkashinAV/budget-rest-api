@@ -7,23 +7,28 @@ import (
 )
 
 type User struct {
-	id int64
+	id int
 	name string
 	surname string
-	available_funds int64
+	available_funds int
 	lang string
 	theme string
 }
 
-func (db DataBase) getUsers() ([]User, error) {
+func GetUsers() ([]User, error) {
 	var users []User
 	var err error
 	var rows *sql.Rows
-	rows, err = db.db.Query("SELECT * FROM user")
+	db, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+	rows, err = db.Query("SELECT * FROM user")
 	if err != nil {
 		return nil, fmt.Errorf("getUsers: %v", err)
 	}
-	defer rows.Close()
+	
 	for rows.Next() {
 		var usr User
 		if err := rows.Scan(&usr.id, &usr.name, &usr.surname, &usr.available_funds, &usr.lang, &usr.theme); err != nil {
