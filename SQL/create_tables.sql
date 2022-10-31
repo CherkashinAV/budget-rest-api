@@ -12,6 +12,7 @@ CREATE TABLE `transactions` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`user` INT NOT NULL,
 	`date` DATE NOT NULL,
+	`ante` int NOT NULL DEFAULT '0',
 	`desc` varchar(255),
 	PRIMARY KEY (`id`)
 );
