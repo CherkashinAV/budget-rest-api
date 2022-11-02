@@ -97,3 +97,19 @@ func GetAllUserMoneyboxes(user string) ([]Moneybox, error) {
 	return m_boxes, nil
 }
 
+func AddUser(user User) (int64, error) {
+	db, err := Connect()
+	if err != nil {
+		return 0, err
+	}
+	result, err := db.Exec("INSERT INTO user (name, Surname) VALUES (?, ?)", user.Name, user.Surname)
+	if err != nil {
+		return 0, fmt.Errorf("AddUser: %v", err)
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("AddUser: %v", err)
+	}
+	return id, nil
+}
+

@@ -13,6 +13,7 @@ func main() {
 	router.GET("/users/:id", getUserById)
 	router.GET("/users/:id/transactions", getAllUserTransactions)
 	router.GET("/users/:id/moneyboxes", getAllUserMoneyboxes)
+	router.POST("/users")
 	router.Run("localhost:8080")
 }
 
@@ -20,6 +21,7 @@ func getUsers (c *gin.Context) {
 	users, err := database.GetUsers()
 	if err != nil {
 		c.IndentedJSON(http.StatusNotFound, nil)
+		return
 	}
 	c.IndentedJSON(http.StatusOK, users)
 	return 
@@ -57,6 +59,20 @@ func getAllUserMoneyboxes (c *gin.Context) {
 		return 
 	}
 	c.IndentedJSON(http.StatusOK, mb)
+	return
+}
+
+func addUser (c *gin.Context) {
+	var user database.User
+	 if err := c.BindJSON(&user); err != nil {
+        return
+    }
+	id, err := database.AddUser(user)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotExtended, 0)
+		return
+	}
+	c.IndentedJSON(http.StatusCreated, id)
 	return
 }
 
