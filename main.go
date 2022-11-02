@@ -13,7 +13,7 @@ func main() {
 	router.GET("/users/:id", getUserById)
 	router.GET("/users/:id/transactions", getAllUserTransactions)
 	router.GET("/users/:id/moneyboxes", getAllUserMoneyboxes)
-	router.POST("/users")
+	router.POST("/users", addUser)
 	router.Run("localhost:8080")
 }
 
