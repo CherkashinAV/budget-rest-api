@@ -3,13 +3,16 @@ package main
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/CherkashinAV/budget-rest-api/database"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	router := gin.Default()
 	router.GET("/users", getUsers)
+	router.GET("/users/:id", getUserById)
+	router.GET("/users/:id/transactions", getAllUserTransactions)
+	router.GET("/users/:id/moneyboxes", getAllUserMoneyboxes)
 	router.Run("localhost:8080")
 }
 
@@ -21,3 +24,39 @@ func getUsers (c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, users)
 	return 
 }
+
+
+func getUserById (c * gin.Context) {
+	id := c.Param("id")
+	user, err := database.GetUserById(id)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, nil)
+		return 
+	}
+	c.IndentedJSON(http.StatusOK, user)
+	return
+}
+
+
+func getAllUserTransactions (c *gin.Context) {
+	id := c.Param("id")
+	tr, err := database.GetAllUserTransactions(id)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, nil)
+		return 
+	}
+	c.IndentedJSON(http.StatusOK, tr)
+	return
+}
+
+func getAllUserMoneyboxes (c *gin.Context) {
+	id := c.Param("id")
+	mb, err := database.GetAllUserMoneyboxes(id)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, nil)
+		return 
+	}
+	c.IndentedJSON(http.StatusOK, mb)
+	return
+}
+
